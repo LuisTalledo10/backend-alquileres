@@ -34,6 +34,24 @@ app.get('/api/empresa-test', async (req, res) => {
   res.json(data);
 });
 
+// 4. Ruta para obtener todos los productos desde la tabla `products`
+app.get('/api/products', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*');
+
+    if (error) {
+      console.error('Supabase error fetching products:', error);
+      return res.status(500).json({ error: error.message || error });
+    }
+
+    return res.json(data);
+  } catch (err) {
+    console.error('Unexpected error fetching products:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 // 4. Iniciar el Servidor
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
